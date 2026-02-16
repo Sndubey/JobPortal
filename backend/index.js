@@ -14,7 +14,7 @@ const app = express();
 
 // CORS must be FIRST, before any other middleware
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173','https://job-portal-backend-gules-one.vercel.app'],
     credentials: true
 }
 app.use(cors(corsOptions));
