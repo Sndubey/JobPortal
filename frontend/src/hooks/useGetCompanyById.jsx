@@ -7,12 +7,17 @@ import { useDispatch } from 'react-redux'
 
 const useGetCompanyById = (companyId) => {
     const dispatch = useDispatch();
-    useEffect(()=>{
+    useEffect(() => {
         const fetchSingleCompany = async () => {
             try {
-                const res = await axios.get(`${COMPANY_API_END_POINT}/get/${companyId}`,{withCredentials:true});
+                const token = localStorage.getItem("token");
+                const res = await axios.get(`${COMPANY_API_END_POINT}/get/${companyId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
                 console.log(res.data.company);
-                if(res.data.success){
+                if (res.data.success) {
                     dispatch(setSingleCompany(res.data.company));
                 }
             } catch (error) {
@@ -20,7 +25,7 @@ const useGetCompanyById = (companyId) => {
             }
         }
         fetchSingleCompany();
-    },[companyId, dispatch])
+    }, [companyId, dispatch])
 }
 
 export default useGetCompanyById

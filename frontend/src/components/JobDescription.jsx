@@ -24,7 +24,13 @@ const JobDescription = () => {
 
     const applyJobHandler = async () => {
         try {
-            const res = await axios.get(`${APPLICATION_API_END_POINT}/apply/${jobId}`, { withCredentials: true });
+            const token = localStorage.getItem("token");
+
+            const res = await axios.get(`${APPLICATION_API_END_POINT}/apply/${jobId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             if (res.data.success) {
                 setIsApplied(true);
                 const updatedSingleJob = {
@@ -43,7 +49,12 @@ const JobDescription = () => {
     useEffect(() => {
         const fetchSingleJob = async () => {
             try {
-                const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`, { withCredentials: true });
+                const token = localStorage.getItem("token");
+                const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
                 if (res.data.success) {
                     dispatch(setSingleJob(res.data.job));
                     setIsApplied(res.data.job.applications.some(app => app.applicant === user?._id));
@@ -56,12 +67,12 @@ const JobDescription = () => {
     }, [jobId, dispatch, user?._id]);
 
     const details = [
-        { icon: Briefcase,        label: 'Role',              value: singleJob?.title },
-        { icon: MapPin,           label: 'Location',          value: singleJob?.location },
-        { icon: Clock,            label: 'Experience',        value: `${singleJob?.experience} yrs` },
-        { icon: BadgeDollarSign,  label: 'Salary',            value: `${singleJob?.salary} LPA` },
-        { icon: Users,            label: 'Total Applicants',  value: singleJob?.applications?.length },
-        { icon: Calendar,         label: 'Posted Date',       value: singleJob?.createdAt?.split("T")[0] },
+        { icon: Briefcase, label: 'Role', value: singleJob?.title },
+        { icon: MapPin, label: 'Location', value: singleJob?.location },
+        { icon: Clock, label: 'Experience', value: `${singleJob?.experience} yrs` },
+        { icon: BadgeDollarSign, label: 'Salary', value: `${singleJob?.salary} LPA` },
+        { icon: Users, label: 'Total Applicants', value: singleJob?.applications?.length },
+        { icon: Calendar, label: 'Posted Date', value: singleJob?.createdAt?.split("T")[0] },
     ];
 
     return (

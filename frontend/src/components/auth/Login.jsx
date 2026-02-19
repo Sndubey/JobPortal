@@ -18,7 +18,7 @@ const Login = () => {
         password: "",
         role: "",
     });
-    const { loading,user } = useSelector(store => store.auth);
+    const { loading, user } = useSelector(store => store.auth);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -31,28 +31,26 @@ const Login = () => {
         try {
             dispatch(setLoading(true));
             const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                withCredentials: true,
+                headers: { "Content-Type": "application/json" }
             });
             if (res.data.success) {
+                localStorage.setItem("token", res.data.token); // <-- save token
                 dispatch(setUser(res.data.user));
                 navigate("/");
                 toast.success(res.data.message);
             }
         } catch (error) {
-            console.log(error);
             toast.error(error.response.data.message);
         } finally {
             dispatch(setLoading(false));
         }
     }
-    useEffect(()=>{
-        if(user){
+
+    useEffect(() => {
+        if (user) {
             navigate("/");
         }
-    },[])
+    }, [])
     return (
         <div>
             <Navbar />

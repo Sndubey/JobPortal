@@ -92,31 +92,22 @@ export const login = async (req, res) => {
             profile: user.profile
         }
 
-        return res.status(200).cookie("token", token, {
-            maxAge: 1 * 24 * 60 * 60 * 1000,
-            httpOnly: true,         // ✅ correct spelling
-            sameSite: 'none',       // ✅ allows cross-origin
-            secure: true            // ✅ required when sameSite is 'none'
-        }).json({
+        return res.status(200).json({
             message: `Welcome back ${user.fullname}`,
             user,
+            token,   // <-- send token in body
             success: true
-        })
+        });
     } catch (error) {
         console.log(error);
     }
 }
 export const logout = async (req, res) => {
     try {
-        return res.status(200).cookie("token", "", {
-            maxAge: 0,
-            httpOnly: true,
-            sameSite: 'none',
-            secure: true
-        }).json({
+        return res.status(200).json({
             message: "Logged out successfully.",
             success: true
-        })
+        });
     } catch (error) {
         console.log(error);
     }

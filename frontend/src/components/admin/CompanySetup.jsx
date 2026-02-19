@@ -22,7 +22,7 @@ const CompanySetup = () => {
         location: "",
         file: null
     });
-    const {singleCompany} = useSelector(store=>store.company);
+    const { singleCompany } = useSelector(store => store.company);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -47,11 +47,12 @@ const CompanySetup = () => {
         }
         try {
             setLoading(true);
+            const token = localStorage.getItem("token");
             const res = await axios.put(`${COMPANY_API_END_POINT}/update/${params.id}`, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-                withCredentials: true
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${token}`
+                }
             });
             if (res.data.success) {
                 toast.success(res.data.message);
@@ -73,7 +74,7 @@ const CompanySetup = () => {
             location: singleCompany.location || "",
             file: singleCompany.file || null
         })
-    },[singleCompany]);
+    }, [singleCompany]);
 
     return (
         <div>

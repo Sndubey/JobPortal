@@ -10,8 +10,11 @@ const useGetAllCompanies = () => {
         const fetchCompanies = async () => {
             try {
                 // Fix: Use parentheses (), not backticks ``
+                const token = localStorage.getItem("token");
                 const res = await axios.get(`${COMPANY_API_END_POINT}/get`, {
-                    withCredentials: true
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 });
                 console.log('API Response:', res.data); // Add this to debug
                 if (res.data.success) {
